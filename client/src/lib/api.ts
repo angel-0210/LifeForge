@@ -130,9 +130,10 @@ export async function getRewards(): Promise<RewardsResponse> {
   }
 }
 
-export async function purchaseReward(rewardId: string): Promise<PurchaseResult> {
+export async function purchaseReward(rewardId: string, itemData?: { name?: string; price?: number }): Promise<PurchaseResult> {
   const result = await apiRequest<PurchaseResult>(`/rewards/${rewardId}/purchase`, {
     method: 'POST',
+    body: JSON.stringify(itemData || {}),
   });
   invalidateCache('/users/me');
   invalidateCache('/rewards');
@@ -160,4 +161,17 @@ export async function getProgress(): Promise<ProgressResponse> {
     if (stale) return stale;
     throw err;
   }
+}
+
+export async function saveCustomization(data: {
+  characterClass?: string;
+  weapon?: string;
+  headgear?: string;
+  auraColor?: number;
+  armorTheme?: number;
+}): Promise<{ success: boolean; message?: string }> {
+  return await apiRequest<{ success: boolean; message?: string }>('/users/customization', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }

@@ -43,7 +43,7 @@ export default function RewardsPage() {
 
     setPurchasingId(item.id);
     try {
-      const result = await purchaseRewardAPI(item.id);
+      const result = await purchaseRewardAPI(item.id, { name: item.name, price: item.price });
       updateCharacter(result.character);
       setUserInventory((prev) => [result.inventoryItem, ...prev]);
       setToastMessage(`${item.name} PURCHASED & ADDED TO INVENTORY!`);
@@ -185,4 +185,3 @@ export default function RewardsPage() {
     </AppLayout>
   );
 }
-

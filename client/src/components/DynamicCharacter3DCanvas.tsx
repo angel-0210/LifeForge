@@ -2,10 +2,13 @@
 
 import dynamic from 'next/dynamic';
 import React from 'react';
+import { CharacterClass } from '@/lib/classVisuals';
 
 interface Character3DProps {
   height?: string;
   disciplineColor?: string;
+  initialClass?: CharacterClass;
+  showControls?: boolean;
 }
 
 const Character3DCanvas = dynamic(() => import('./Character3DCanvas'), {

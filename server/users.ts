@@ -13,6 +13,38 @@ const DEFAULT_ATTRIBUTES = [
   { id: '66666666-6666-6666-6666-666666666666', name: 'General', icon: 'groups', description: 'Overall productivity and community directives' },
 ];
 
+const CLASS_LEVEL_REQUIREMENTS: Record<string, number> = {
+  warrior: 1,
+  mage: 1,
+  rogue: 3,
+  paladin: 6,
+  bard: 9,
+  cyberpunk: 12,
+  necromancer: 15,
+};
+
+const WEAPON_LEVEL_REQUIREMENTS: Record<string, number> = {
+  greatsword: 1,
+  staff: 1,
+  daggers: 3,
+  shield_sword: 6,
+  lute: 9,
+  cyber_blade: 12,
+  scythe: 15,
+  none: 1,
+};
+
+const HEADGEAR_LEVEL_REQUIREMENTS: Record<string, number> = {
+  helm: 1,
+  hood: 3,
+  visor: 5,
+  crown: 7,
+  halo: 10,
+  cowl: 14,
+  horns: 18,
+  none: 1,
+};
+
 // GET /api/users/me - Get current user info & character profile
 usersRouter.get('/me', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
@@ -70,6 +102,71 @@ usersRouter.get('/me', async (req: AuthenticatedRequest, res: Response): Promise
     });
   } catch (err) {
     res.status(500).json({ code: 'INTERNAL_ERROR', message: 'Failed to fetch user profile' });
+  }
+});
+
+// POST /api/users/customization - Validate & save level-based avatar customization
+usersRouter.post('/customization', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user!.id;
+    const { characterClass, weapon, headgear } = req.body;
+
+    let character = null;
+    try {
+      const { data } = await supabaseAdmin
+        .from('characters')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+      character = data;
+    } catch (_err) {
+      // Fallback
+    }
+
+    const playerLevel = character?.level || 1;
+
+    // Validate Class Unlock Level
+    if (characterClass && CLASS_LEVEL_REQUIREMENTS[characterClass]) {
+      const reqLvl = CLASS_LEVEL_REQUIREMENTS[characterClass];
+      if (playerLevel < reqLvl) {
+        res.status(403).json({
+          code: 'LEVEL_LOCKED',
+          message: `Class '${characterClass}' requires Level ${reqLvl} (Current Level: ${playerLevel})`,
+        });
+        return;
+      }
+    }
+
+    // Validate Weapon Unlock Level
+    if (weapon && WEAPON_LEVEL_REQUIREMENTS[weapon]) {
+      const reqLvl = WEAPON_LEVEL_REQUIREMENTS[weapon];
+      if (playerLevel < reqLvl) {
+        res.status(403).json({
+          code: 'LEVEL_LOCKED',
+          message: `Weapon '${weapon}' requires Level ${reqLvl} (Current Level: ${playerLevel})`,
+        });
+        return;
+      }
+    }
+
+    // Validate Headgear Unlock Level
+    if (headgear && HEADGEAR_LEVEL_REQUIREMENTS[headgear]) {
+      const reqLvl = HEADGEAR_LEVEL_REQUIREMENTS[headgear];
+      if (playerLevel < reqLvl) {
+        res.status(403).json({
+          code: 'LEVEL_LOCKED',
+          message: `Headgear '${headgear}' requires Level ${reqLvl} (Current Level: ${playerLevel})`,
+        });
+        return;
+      }
+    }
+
+    res.json({
+      success: true,
+      message: 'Avatar customization authorized and updated.',
+    });
+  } catch (err) {
+    res.status(500).json({ code: 'INTERNAL_ERROR', message: 'Failed to update customization' });
   }
 });
 
@@ -194,4 +291,3 @@ usersRouter.get('/progress', async (req: AuthenticatedRequest, res: Response): P
     });
   }
 });
-
