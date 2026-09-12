@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #151218;
+    color: #e7e0e8;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  body {
+    overscroll-behavior: none;
+    min-height: 100vh;
+  }
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+  main > :last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+/* Hide scrollbars for clean HUD presentation */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Magitech & Visual Effects */
+.hud-glass {
+  background: rgba(33, 31, 36, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.gold-glow {
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.4);
+}
+
+.violet-glow {
+  box-shadow: 0 0 18px rgba(208, 188, 255, 0.4);
+}
+
+.emerald-glow {
+  box-shadow: 0 0 18px rgba(86, 229, 169, 0.4);
+}
+
+/* Diamond Rune Checkbox styling */
+.rune-check {
+  transform: rotate(45deg);
+  transition: all 0.2s ease-in-out;
+}
+.rune-check > * {
+  transform: rotate(-45deg);
+}
+
+/* Notched Corner Clip Path */
+.corner-notch {
+  clip-path: polygon(
+    0 8px, 8px 0,
+    calc(100% - 8px) 0, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 8px) 100%,
+    8px 100%, 0 calc(100% - 8px)
+  );
+}

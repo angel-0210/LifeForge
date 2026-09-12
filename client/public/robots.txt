@@ -1,0 +1,20 @@
+# LifeForge robots.txt configuration
+User-agent: *
+Allow: /$
+Allow: /welcome$
+
+# Block authenticated dashboard & private user routes
+Disallow: /home
+Disallow: /quests
+Disallow: /rewards
+Disallow: /progress
+Disallow: /profile
+Disallow: /character
+Disallow: /ascension
+Disallow: /login
+Disallow: /signup
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /api/
+
+Sitemap: https://lifeforge.app/sitemap.xml
