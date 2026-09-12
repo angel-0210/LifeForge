@@ -6,8 +6,8 @@ export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error?: Error & { digest?: string };
+  reset?: () => void;
 }) {
   return (
     <html lang="en" className="dark">
@@ -23,10 +23,10 @@ export default function GlobalError({
             Global Layout Exception
           </h2>
           <p className="text-sm text-gray-400">
-            {error.message || 'A critical error prevented the application from rendering.'}
+            {error?.message || 'A critical error prevented the application from rendering.'}
           </p>
           <button
-            onClick={() => reset()}
+            onClick={() => reset?.()}
             className="w-full mt-2 px-4 py-2.5 rounded-lg bg-amber-500 text-black font-bold uppercase text-[11px] tracking-wider hover:bg-amber-400 transition-all cursor-pointer"
           >
             Reboot Matrix System

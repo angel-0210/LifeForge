@@ -7,8 +7,8 @@ export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error?: Error & { digest?: string };
+  reset?: () => void;
 }) {
   return (
     <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-6 text-center text-on-surface">
@@ -23,11 +23,11 @@ export default function Error({
           Matrix Operation Interrupted
         </h2>
         <p className="font-body-sm text-body-sm text-on-surface-variant">
-          {error.message || 'An unexpected error occurred during page execution.'}
+          {error?.message || 'An unexpected error occurred during page execution.'}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 w-full pt-2">
           <button
-            onClick={() => reset()}
+            onClick={() => reset?.()}
             className="flex-1 px-4 py-2.5 rounded-lg bg-primary text-on-primary font-label-telemetry text-[11px] uppercase tracking-wider font-bold shadow-[0_0_16px_rgba(245,158,11,0.4)] hover:bg-primary-fixed transition-all cursor-pointer"
           >
             Re-Initialize State
